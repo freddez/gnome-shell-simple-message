@@ -21,3 +21,5 @@ I use this extension to view my current org-mode running task:
                         "'No active clock'"))))
   (run-with-timer 0 60 'current-task-to-status)
 ```
+
+Install the extension from https://extensions.gnome.org/extension/5018/simple-message/

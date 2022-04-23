@@ -1,10 +1,9 @@
 const { GObject, St } = imports.gi;
 const Clutter = imports.gi.Clutter;
-const Lang = imports.lang;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
-
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
 const Convenience = Me.imports.convenience;
 
 let SimpleMessage = GObject.registerClass(
@@ -14,9 +13,7 @@ let SimpleMessage = GObject.registerClass(
       this._settings = Convenience.getSettings();
       this._settingsChangedSignal = this._settings.connect(
         "changed",
-        Lang.bind(this, function () {
-          this._refreshUI();
-        })
+        this._refreshUI.bind(this)
       );
       this._buildUI();
       this._refreshUI();
@@ -50,7 +47,7 @@ let SimpleMessage = GObject.registerClass(
   }
 );
 
-let simpleMessage;
+let simpleMessage = null;
 
 function init() {}
 
@@ -60,5 +57,5 @@ function enable() {
 }
 
 function disable() {
-  if (simpleMessage != null) simpleMessage.destroy();
+  if (simpleMessage !== null) simpleMessage.destroy();
 }

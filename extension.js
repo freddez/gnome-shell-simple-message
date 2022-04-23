@@ -3,14 +3,12 @@ const Clutter = imports.gi.Clutter;
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-const Convenience = Me.imports.convenience;
 
 let SimpleMessage = GObject.registerClass(
   class SimpleMessage extends PanelMenu.Button {
     _init() {
       super._init(0.0, "SimpleMessage");
-      this._settings = Convenience.getSettings();
+      this._settings = ExtensionUtils.getSettings();
       this._settingsChangedSignal = this._settings.connect(
         "changed",
         this._refreshUI.bind(this)
@@ -57,5 +55,8 @@ function enable() {
 }
 
 function disable() {
-  if (simpleMessage !== null) simpleMessage.destroy();
+  if (simpleMessage) {
+    simpleMessage.destroy();
+    simpleMessage = null;
+  }
 }

@@ -67,8 +67,8 @@ function fillPreferencesWindow(window) {
 */
 
 //GTK3 WINDOW
-const BigAvatarSettings = new GObject.Class({
-    Name: 'BigAvatarPrefs',
+const SimpleMessageSettings = new GObject.Class({
+    Name: 'SimpleMessagePrefs',
     Extends: Gtk.Grid,
     _init: function(params) {
         //Give grid's characteristics
@@ -93,6 +93,6 @@ const BigAvatarSettings = new GObject.Class({
 });
 
 function buildPrefsWidget() {
-    let widget = new BigAvatarSettings();
+    let widget = new SimpleMessageSettings();
     return widget;
 }

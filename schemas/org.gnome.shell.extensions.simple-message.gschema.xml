@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="gnome-shell-extensions">
+    <schema id="org.gnome.shell.extensions.simple-message" path="/org/gnome/shell/extensions/simple-message/" >
+
+        <key name="message" type="s">
+            <default>"Hello World!"</default>
+            <summary>Message</summary>
+            <description>String defined by the user to be displayed</description>
+        </key>
+
+    </schema>
+</schemalist>

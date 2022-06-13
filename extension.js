@@ -1,18 +1,54 @@
-const { GObject, St } = imports.gi;
-const Clutter = imports.gi.Clutter;
+/* extension.js
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+'use strict';
+
+//Import required libraries
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
+const { Clutter, GObject, St } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 
+function init() {}
+
+let simpleMessageItem = null;//Variable to hold our extension
+let settings;//Variable to connect to settings
+
+//Run when extension is enabled
+function enable() {
+  settings = ExtensionUtils.getSettings();
+  simpleMessageItem = new SimpleMessage();
+  Main.panel.addToStatusArea("simpleMessage", simpleMessageItem);
+}
+
+//Run when extension is disabled
+function disable() {
+    simpleMessageItem.destroy();
+    simpleMessageItem = null;
+    settings.run_dispose();
+    settings = null;
+}
+
+//Create the message object
 let SimpleMessage = GObject.registerClass(
   class SimpleMessage extends PanelMenu.Button {
     _init() {
       super._init(0.0, "SimpleMessage");
-      this._settings = ExtensionUtils.getSettings();
-      this._settingsChangedSignal = this._settings.connect(
-        "changed",
-        this._refreshUI.bind(this)
-      );
+      settings.connect('changed::message', this._refreshUI.bind(this));
       this._buildUI();
       this._refreshUI();
     }
@@ -23,9 +59,7 @@ let SimpleMessage = GObject.registerClass(
         y_align: Clutter.ActorAlign.CENTER,
         y_expand: true,
       });
-      (this instanceof Clutter.Actor ? this : this.actor).add_actor(
-        this._message
-      );
+      (this instanceof Clutter.Actor ? this : this.actor).add_actor(this._message);
       this._newMessage = new St.Entry({
         name: "simple-message-new-message",
         track_hover: true,
@@ -34,29 +68,8 @@ let SimpleMessage = GObject.registerClass(
     }
 
     _refreshUI() {
-      let message = this._loadMessage();
+      let message = settings.get_string("message");
       this._message.set_text(message);
       this._newMessage.set_text(message);
     }
-
-    _loadMessage() {
-      return this._settings.get_string("message");
-    }
-  }
-);
-
-let simpleMessage = null;
-
-function init() {}
-
-function enable() {
-  simpleMessage = new SimpleMessage();
-  Main.panel.addToStatusArea("simpleMessage", simpleMessage);
-}
-
-function disable() {
-  if (simpleMessage) {
-    simpleMessage.destroy();
-    simpleMessage = null;
-  }
-}
+});

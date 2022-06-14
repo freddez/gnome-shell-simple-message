@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="gnome-shell-extensions">
-  <schema path="/org/gnome/shell/extensions/simple-message/" id="org.gnome.shell.extensions.simple-message">
-    <key type="s" name="message">
-      <default>"empty"</default>
-    </key>
-  </schema>
-</schemalist>

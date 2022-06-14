@@ -1,25 +1,32 @@
 # gnome-shell-simple-message
 
-Write message on top bar with dconf:
+Install the extension from the [extension website](https://extensions.gnome.org/extension/5018/simple-message/).
+
+You can change the message from command line with `gsettings`:
 
 ```sh
-dconf write /org/gnome/shell/extensions/simple-message/message 'hello world'
+gsettings --schemadir $HOME/.local/share/gnome-shell/extensions/simple-message@freddez/schemas \
+set org.gnome.shell.extensions.simple-message message "Hello world!"
+```
+
+or `dconf`:
+
+```sh
+dconf write /org/gnome/shell/extensions/simple-message/message '"Hello world!"'
 ```
 
 I use this extension to view my current org-mode running task:
 
 ```emacs-lisp
-  (defun current-task-to-status ()
-    (interactive)
-    (if (fboundp 'org-clocking-p)
-        (if (org-clocking-p)
-            (call-process "dconf" nil nil nil "write"
-                          "/org/gnome/shell/extensions/simple-message/message"
-                          (concat "'" (org-clock-get-clock-string) "'"))
+(defun current-task-to-status ()
+  (interactive)
+  (if (fboundp 'org-clocking-p)
+      (if (org-clocking-p)
           (call-process "dconf" nil nil nil "write"
                         "/org/gnome/shell/extensions/simple-message/message"
-                        "'No active clock'"))))
-  (run-with-timer 0 60 'current-task-to-status)
+                        (concat "'" (org-clock-get-clock-string) "'"))
+        (call-process "dconf" nil nil nil "write"
+                      "/org/gnome/shell/extensions/simple-message/message"
+                      "'No active clock'"))))
+(run-with-timer 0 60 'current-task-to-status)
 ```
-
-Install the extension from https://extensions.gnome.org/extension/5018/simple-message/

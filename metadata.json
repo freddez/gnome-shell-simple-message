@@ -2,8 +2,8 @@
   "uuid": "simple-message@freddez",
   "name": "Simple Message",
   "description": "Show a message written by the user on the top bar.",
-  "shell-version": ["40", "41", "42"],
+  "shell-version": ["40", "41", "42", "43"],
   "url": "https://github.com/freddez/gnome-shell-simple-message",
-  "version": 9,
+  "version": 10,
   "settings-schema": "org.gnome.shell.extensions.simple-message"
 }

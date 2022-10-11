@@ -29,4 +29,8 @@ I use this extension to view my current org-mode running task:
                       "/org/gnome/shell/extensions/simple-message/message"
                       "'No active clock'"))))
 (run-with-timer 0 60 'current-task-to-status)
+(add-hook 'org-clock-in-hook 'current-task-to-status)
+(add-hook 'org-clock-out-hook 'current-task-to-status)
+(add-hook 'org-clock-cancel-hook 'current-task-to-status)
+(add-hook 'org-clock-goto-hook 'current-task-to-status)
 ```

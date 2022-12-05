@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="gnome-shell-extensions">
+<schemalist gettext-domain="simple-message">
     <schema id="org.gnome.shell.extensions.simple-message" path="/org/gnome/shell/extensions/simple-message/" >
+
+        <key name="panel-alignment" type="i">
+            <default>2</default>
+            <summary>Panel box</summary>
+            <description>Which panel box (left, center, right) the message is part of</description>
+        </key>
+
+        <key name="panel-position" type="i">
+            <default>0</default>
+            <summary>Panel box position</summary>
+            <description>Index of the message within a panel box</description>
+        </key>
 
         <key name="message" type="s">
             <default>"Hello World!"</default>

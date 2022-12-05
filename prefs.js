@@ -1,4 +1,4 @@
-/* extension.js
+/* prefs.js
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,47 +17,94 @@
  */
 'use strict';
 
-//Import required libraries
-const { Gio, GObject, Gtk } = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;//Access to settings from schema
+// Import required libraries
+const { Adw, GObject, Gtk } = imports.gi;
+const ExtensionUtils = imports.misc.extensionUtils;// Access settings from schema
+const Me = ExtensionUtils.getCurrentExtension();
 
 function init() {}
 
-const SimpleMessageSettings = new GObject.Class({
-  Name: 'SimpleMessagePrefs',
-  Extends: Gtk.Grid,
-  _init: function(params) {
-    //Give grid's characteristics
-    this.parent(params);
-    this.column_spacing = 32;
-    this.row_spacing = 16;
-    this.margin_top = 16;
-    this.margin_bottom = 16;
-    this.margin_start = 32;
-    this.margin_end = 32;
+// GTK4 preferences window
+function fillPreferencesWindow(window) {
+  const settings = ExtensionUtils.getSettings();
 
-    let settings = ExtensionUtils.getSettings();
+  // Create a page
+  const page = new Adw.PreferencesPage();
+  window.add(page);
 
-    let messageLabel = new Gtk.Label({
-      label: '<b><u>Write your message</u></b>',
-      use_markup: true,
+  // Create a group of settings
+  const group = new Adw.PreferencesGroup();
+  page.add(group);
+
+  // Create a row for position settings
+  const positionRow = new Adw.ActionRow({
+    title: 'Top Panel Location',
+    subtitle: 'Group and Position',
+  });
+  group.add(positionRow);
+
+  // Create a group of toggle buttons to set the panel box
+  const left_button =
+    new Gtk.ToggleButton({ label: 'Left', valign: Gtk.Align.CENTER });
+  const center_button =
+    new Gtk.ToggleButton({ label: 'Center', valign: Gtk.Align.CENTER });
+  const right_button =
+    new Gtk.ToggleButton({ label: 'Right', valign: Gtk.Align.CENTER });
+  center_button.set_group(left_button);// Add those buttons on the same line
+  right_button.set_group(left_button);
+  // Set the initial state of the toggle buttons and make them update
+  // the settings
+  const panelBoxes = [left_button, center_button, right_button];
+  const initialPanelBox = settings.get_int('panel-alignment');
+  function _initiatePanelButton(button, index, array) {
+    if ( initialPanelBox == index) { button.set_active(true) }
+    button.connect('toggled', () => {
+      settings.set_int('panel-alignment', index);
     });
-    let messageText = new Gtk.EntryBuffer({ text: settings.get_string('message') })
-    let messageField = new  Gtk.Entry({
-      buffer: messageText,
-      hexpand: true,
-      halign: Gtk.Align.CENTER,
-      valign:Gtk.Align.CENTER
-    })
-
-    settings.bind( 'message', messageField.buffer, 'text', Gio.SettingsBindFlags.DEFAULT );
-
-    this.attach(messageLabel, 0,0,1,1);
-    this.attach(messageField, 0,1,1,1);
+    positionRow.add_suffix(button);
   }
-});
+  panelBoxes.forEach(_initiatePanelButton);
 
-function buildPrefsWidget() {
-    let widget = new SimpleMessageSettings();
-    return widget;
+  // Within a panel box, the position should be provided
+  // Create a spin button with the initial position value.
+  const initialPanelBoxPosition = settings.get_int('panel-position');
+  const positionButton = new Gtk.SpinButton({ valign: Gtk.Align.CENTER });
+  positionButton.set_adjustment(new Gtk.Adjustment({
+    lower: -100,
+    upper: 100,
+    value: initialPanelBoxPosition,
+    step_increment: 1,
+    page_increment: 1,
+    page_size: 0,
+  }));
+  // Let the spin button update the settings state.
+  positionButton.connect('value-changed', () => {
+    settings.set_int(
+      'panel-position', positionButton.get_adjustment().value);
+  });
+  // Add it to the GUI.
+  positionRow.add_suffix(positionButton);
+
+  // Create an option to access and edit the message
+  const messageRow = new Adw.ActionRow({
+    title: 'Write your message',
+    subtitle: 'Confirm with Enter'
+  });
+  group.add(messageRow);
+  // Create a text box where the user can enter the message
+  const messageText = new Gtk.EntryBuffer({
+    text: settings.get_string('message')
+  });
+  const messageField = new Gtk.Entry({
+    buffer: messageText,
+    hexpand: true,
+    valign:Gtk.Align.CENTER,
+    halign:Gtk.Align.CENTER
+  })
+  // Let the text box update the message
+  messageField.connect('activate', () => {
+    settings.set_string('message', messageText.text);
+  })
+  // Add the text box to the row
+  messageRow.add_suffix(messageField);
 }

@@ -17,59 +17,77 @@
  */
 'use strict';
 
-//Import required libraries
+// Import required libraries
 const Main = imports.ui.main;
 const PanelMenu = imports.ui.panelMenu;
 const { Clutter, GObject, St } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+
+let simpleMessage = null;// Variable to hold our extension
+
+// Create the extension object
+let SimpleMessage = GObject.registerClass({
+    GTypeName: 'SimpleMessage',
+}, class SimpleMessage extends PanelMenu.Button {
+    _init() {
+        super._init(St.Align.START);
+
+        // Get settings values
+        this._settings = ExtensionUtils.getSettings();
+        this.message = this._settings.get_string('message');
+        this.message_alignment = this._settings.get_int('panel-alignment');
+        this.message_position = this._settings.get_int('panel-position');
+
+        // Create the object that holds and displays the message
+        this.messageBox = new St.Label({
+            name: "simple-message-message",
+            y_align: Clutter.ActorAlign.CENTER,
+            y_expand: true,
+          });
+        this.add_actor(this.messageBox);
+
+        // Add message text
+        this.messageBox.set_text(this.message);
+        // Add message to panel
+        Main.panel.addToStatusArea('simpleMessage', this, this.message_position, this.message_alignment);
+
+        // Connect change in values settings to functions to update the message and position
+        this._settings.connect('changed::message', this._rewriteMessage.bind(this));
+        this._settings.connect('changed::panel-alignment', this._moveMessage.bind(this));
+        this._settings.connect('changed::panel-position', this._moveMessage.bind(this));
+    }
+
+    _rewriteMessage() {
+        this.message = this._settings.get_string('message');
+        this.messageBox.set_text(this.message);
+    }
+
+    _moveMessage() {
+        this.get_parent().remove_actor(this);// Remove from the old location
+        this.message_alignment = this._settings.get_int('panel-alignment');
+        this.message_position = this._settings.get_int('panel-position');
+
+        // Allows easily addressable boxes
+        let boxes = {
+            0: Main.panel._leftBox,
+            1: Main.panel._centerBox,
+            2: Main.panel._rightBox
+        };
+        // Insert at new location
+        boxes[this.message_alignment].insert_child_at_index(this, this.message_position);
+    }
+});
 
 function init() {}
 
-let simpleMessageItem = null;//Variable to hold our extension
-let settings;//Variable to connect to settings
-
-//Run when extension is enabled
+// Run when extension is enabled
 function enable() {
-  settings = ExtensionUtils.getSettings();
-  simpleMessageItem = new SimpleMessage();
-  Main.panel.addToStatusArea("simpleMessage", simpleMessageItem);
+    simpleMessage = new SimpleMessage();
 }
 
-//Run when extension is disabled
+// Run when extension is disabled
 function disable() {
-    simpleMessageItem.destroy();
-    simpleMessageItem = null;
-    settings.run_dispose();
-    settings = null;
+    simpleMessage.destroy();
+    simpleMessage = null;
 }
-
-//Create the message object
-let SimpleMessage = GObject.registerClass(
-  class SimpleMessage extends PanelMenu.Button {
-    _init() {
-      super._init(0.0, "SimpleMessage");
-      settings.connect('changed::message', this._refreshUI.bind(this));
-      this._buildUI();
-      this._refreshUI();
-    }
-
-    _buildUI() {
-      this._message = new St.Label({
-        name: "simple-message-message",
-        y_align: Clutter.ActorAlign.CENTER,
-        y_expand: true,
-      });
-      (this instanceof Clutter.Actor ? this : this.actor).add_actor(this._message);
-      this._newMessage = new St.Entry({
-        name: "simple-message-new-message",
-        track_hover: true,
-        can_focus: true,
-      });
-    }
-
-    _refreshUI() {
-      let message = settings.get_string("message");
-      this._message.set_text(message);
-      this._newMessage.set_text(message);
-    }
-});

@@ -2,7 +2,7 @@
 
 Install the extension from the [extension website](https://extensions.gnome.org/extension/5018/simple-message/).
 
-You can change the message from command line with `gsettings`:
+You can change the message from command line with `gsettings` (or in the preference panel):
 
 ```sh
 gsettings --schemadir $HOME/.local/share/gnome-shell/extensions/simple-message@freddez/schemas \
@@ -14,6 +14,9 @@ or `dconf`:
 ```sh
 dconf write /org/gnome/shell/extensions/simple-message/message '"Hello world!"'
 ```
+
+It is also possible to launch a custom command on message click. See "command" property in dconf or preference panel.
+
 
 I use this extension to view my current org-mode running task:
 

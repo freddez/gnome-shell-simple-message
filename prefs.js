@@ -107,4 +107,27 @@ function fillPreferencesWindow(window) {
   })
   // Add the text box to the row
   messageRow.add_suffix(messageField);
+
+  // Create an option to access and edit the command
+  const commandRow = new Adw.ActionRow({
+    title: 'Command to execute on click',
+    subtitle: 'Confirm with Enter'
+  });
+  group.add(commandRow);
+  // Create a text box where the user can enter the command
+  const commandText = new Gtk.EntryBuffer({
+    text: settings.get_string('command')
+  });
+  const commandField = new Gtk.Entry({
+    buffer: commandText,
+    hexpand: true,
+    valign:Gtk.Align.CENTER,
+    halign:Gtk.Align.CENTER
+  })
+  // Let the text box update the command
+  commandField.connect('activate', () => {
+    settings.set_string('command', commandText.text);
+  })
+  // Add the text box to the row
+  commandRow.add_suffix(commandField);
 }

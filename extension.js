@@ -23,6 +23,7 @@ const PanelMenu = imports.ui.panelMenu;
 const { Clutter, GObject, St } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
+const GLib = imports.gi.GLib;
 
 let simpleMessage = null;// Variable to hold our extension
 
@@ -36,6 +37,7 @@ let SimpleMessage = GObject.registerClass({
         // Get settings values
         this._settings = ExtensionUtils.getSettings();
         this.message = this._settings.get_string('message');
+        this.command = this._settings.get_string('command');
         this.message_alignment = this._settings.get_int('panel-alignment');
         this.message_position = this._settings.get_int('panel-position');
 
@@ -54,8 +56,14 @@ let SimpleMessage = GObject.registerClass({
 
         // Connect change in values settings to functions to update the message and position
         this._settings.connect('changed::message', this._rewriteMessage.bind(this));
+        this._settings.connect('changed::command', this._rewriteCommand.bind(this));
         this._settings.connect('changed::panel-alignment', this._moveMessage.bind(this));
         this._settings.connect('changed::panel-position', this._moveMessage.bind(this));
+        this.connect('button-press-event', () => {
+            if (this.command) {
+                GLib.spawn_command_line_async(this.command);
+            }
+        })
     }
 
     _rewriteMessage() {
@@ -77,6 +85,10 @@ let SimpleMessage = GObject.registerClass({
         // Insert at new location
         boxes[this.message_alignment].insert_child_at_index(this, this.message_position);
     }
+    _rewriteCommand() {
+        this.command = this._settings.get_string('command');
+    }
+
 });
 
 function init() {}

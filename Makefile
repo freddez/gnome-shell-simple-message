@@ -16,8 +16,7 @@ disable:
 	gnome-extensions disable $(EXTENSION_UUID)
 
 pack:
-	gnome-extensions pack  \
-	--force
+	gnome-extensions pack --force
 
 prefs:
 	gnome-extensions prefs $(EXTENSION_UUID)

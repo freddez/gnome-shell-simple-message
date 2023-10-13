@@ -16,26 +16,70 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 'use strict';
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 
-// Import required libraries
-const Main = imports.ui.main;
-const PanelMenu = imports.ui.panelMenu;
-const { Clutter, GObject, St } = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-const GLib = imports.gi.GLib;
+import Clutter from 'gi://Clutter';
+import GObject from 'gi://GObject';
+import St from 'gi://St';
+import GLib from 'gi://GLib';
+let simpleMessage = null; // Variable to hold our extension
 
-let simpleMessage = null;// Variable to hold our extension
+
+export default class SimpleMessageExtension extends Extension {
+    /**
+     * This class is constructed once when your extension is loaded, not
+     * enabled. This is a good time to setup translations or anything else you
+     * only do once.
+     *
+     * You MUST NOT make any changes to GNOME Shell, connect any signals or add
+     * any event sources here.
+     *
+     * @param {ExtensionMeta} metadata - An extension meta object
+     */
+    constructor(metadata) {
+        super(metadata);
+    }
+
+    /**
+     * This function is called when your extension is enabled, which could be
+     * done in GNOME Extensions, when you log in or when the screen is unlocked.
+     *
+     * This is when you should setup any UI for your extension, change existing
+     * widgets, connect signals or modify GNOME Shell's behavior.
+     */
+    enable() {
+        simpleMessage = new SimpleMessage();
+    }
+
+    /**
+     * This function is called when your extension is uninstalled, disabled in
+     * GNOME Extensions or when the screen locks.
+     *
+     * Anything you created, modified or setup in enable() MUST be undone here.
+     * Not doing so is the most common reason extensions are rejected in review!
+     */
+    disable() {
+        simpleMessage.destroy();
+        simpleMessage = null;
+    }
+}
+
+
+
+
+
 
 // Create the extension object
-let SimpleMessage = GObject.registerClass({
-    GTypeName: 'SimpleMessage',
-}, class SimpleMessage extends PanelMenu.Button {
+let SimpleMessage = GObject.registerClass({GTypeName: 'SimpleMessage'}, class SimpleMessage extends PanelMenu.Button {
     _init() {
-        super._init(St.Align.START);
+        super._init(/*St.Align.START*/);
 
-        // Get settings values
-        this._settings = ExtensionUtils.getSettings();
+        // Getting the extension object by UUID
+        let extensionObject = Extension.lookupByUUID('simple-message@freddez');
+        this._settings = extensionObject.getSettings();
+        //this._settings = ExtensionUtils.getSettings();
         this.message = this._settings.get_string('message');
         this.command = this._settings.get_string('command');
         this.message_alignment = this._settings.get_int('panel-alignment');
@@ -46,7 +90,7 @@ let SimpleMessage = GObject.registerClass({
             name: "simple-message-message",
             y_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
-          });
+        });
         this.add_actor(this.messageBox);
 
         // Add message text
@@ -90,16 +134,3 @@ let SimpleMessage = GObject.registerClass({
     }
 
 });
-
-function init() {}
-
-// Run when extension is enabled
-function enable() {
-    simpleMessage = new SimpleMessage();
-}
-
-// Run when extension is disabled
-function disable() {
-    simpleMessage.destroy();
-    simpleMessage = null;
-}

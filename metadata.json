@@ -4,8 +4,8 @@
   "gettext-domain": "simple-message",
   "name": "Simple Message",
   "settings-schema": "org.gnome.shell.extensions.simple-message",
-  "shell-version": ["45"],
+  "shell-version": ["46"],
   "url": "https://github.com/freddez/gnome-shell-simple-message",
   "uuid": "simple-message@freddez",
-  "version": 15
+  "version": 16
 }

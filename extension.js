@@ -91,7 +91,7 @@ let SimpleMessage = GObject.registerClass({GTypeName: 'SimpleMessage'}, class Si
             y_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
         });
-        this.add_actor(this.messageBox);
+        this.actor.add_child(this.messageBox);
 
         // Add message text
         this.messageBox.set_text(this.message);

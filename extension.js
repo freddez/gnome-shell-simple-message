@@ -18,8 +18,8 @@
 "use strict";
 import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 import * as Main from "resource:///org/gnome/shell/ui/main.js";
+import * as Config from "resource:///org/gnome/shell/misc/config.js";
 import * as PanelMenu from "resource:///org/gnome/shell/ui/panelMenu.js";
-
 import Clutter from "gi://Clutter";
 import GObject from "gi://GObject";
 import St from "gi://St";
@@ -71,6 +71,8 @@ let SimpleMessage = GObject.registerClass(
   class SimpleMessage extends PanelMenu.Button {
     _init() {
       super._init(/*St.Align.START*/);
+      const [major] = Config.PACKAGE_VERSION.split(".");
+      const shellVersion = Number.parseInt(major);
 
       // Getting the extension object by UUID
       let extensionObject = Extension.lookupByUUID("simple-message@freddez");
@@ -87,7 +89,11 @@ let SimpleMessage = GObject.registerClass(
         y_align: Clutter.ActorAlign.CENTER,
         y_expand: true,
       });
-      this.add_actor(this.messageBox);
+      if (shellVersion >= 46) {
+        this.actor.add_child(this.messageBox);
+      } else {
+        this.add_actor(this.messageBox);
+      }
 
       // Add message text
       this.messageBox.set_text(this.message);

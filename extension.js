@@ -49,7 +49,7 @@ export default class SimpleMessageExtension extends Extension {
    * widgets, connect signals or modify GNOME Shell's behavior.
    */
   enable() {
-    simpleMessage = new SimpleMessage();
+    simpleMessage = new SimpleMessage(this);
   }
 
   /**
@@ -69,15 +69,11 @@ export default class SimpleMessageExtension extends Extension {
 let SimpleMessage = GObject.registerClass(
   { GTypeName: "SimpleMessage" },
   class SimpleMessage extends PanelMenu.Button {
-    _init() {
+    _init(extensionObject) {
       super._init(/*St.Align.START*/);
       const [major] = Config.PACKAGE_VERSION.split(".");
       const shellVersion = Number.parseInt(major);
-
-      // Getting the extension object by UUID
-      let extensionObject = Extension.lookupByUUID("simple-message@freddez");
       this._settings = extensionObject.getSettings();
-      //this._settings = ExtensionUtils.getSettings();
       this.message = this._settings.get_string("message");
       this.command = this._settings.get_string("command");
       this.message_alignment = this._settings.get_int("panel-alignment");

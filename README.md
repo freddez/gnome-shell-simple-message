@@ -37,3 +37,8 @@ I use this extension to view my current org-mode running task:
 (add-hook 'org-clock-cancel-hook 'current-task-to-status)
 (add-hook 'org-clock-goto-hook 'current-task-to-status)
 ```
+
+Example Projects:
+| Project | Description |
+| :------ | :---------- |
+| [Hextime](https://github.com/JohnAlexCO/hextime) | A base-16 clock for the gnome shell |

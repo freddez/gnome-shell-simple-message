@@ -1,0 +1,120 @@
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gtk.vfs.Daemon' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gtk.vfs.Daemon'
+fusermount3: failed to access mountpoint /run/user/1001/gvfs: Permission denied
+libmutter-Message: 11:40:18.195: Running GNOME Shell (using mutter 45.2) as a Wayland display server
+libmutter-Message: 11:40:18.195: Enabling experimental feature 'x11-randr-fractional-scaling'
+** Message: 11:40:18.253: Obtained a high priority EGL context
+** Message: 11:40:18.254: Obtained a high priority EGL context
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.a11y.Bus' requested by ':1.2' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.a11y.Bus'
+libmutter-Message: 11:40:18.289: Using public X11 display :2, (using :3 for managed services)
+
+(gnome-shell:62766): libmutter-WARNING **: 11:40:18.289: WL: unable to lock lockfile /run/user/1001/wayland-0.lock, maybe another compositor is running
+
+libmutter-Message: 11:40:18.289: Using Wayland display name 'wayland-1'
+Window manager warning: Failed to set environment variable GNOME_SETUP_DISPLAY for gnome-session: GDBus.Error:org.freedesktop.DBus.Error.NameHasNoOwner: Name "org.gnome.SessionManager" does not exist
+Window manager warning: Failed to set environment variable DISPLAY for gnome-session: GDBus.Error:org.freedesktop.DBus.Error.NameHasNoOwner: Name "org.gnome.SessionManager" does not exist
+Window manager warning: Failed to set environment variable XAUTHORITY for gnome-session: GDBus.Error:org.freedesktop.DBus.Error.NameHasNoOwner: Name "org.gnome.SessionManager" does not exist
+Window manager warning: Failed to set environment variable WAYLAND_DISPLAY for gnome-session: GDBus.Error:org.freedesktop.DBus.Error.NameHasNoOwner: Name "org.gnome.SessionManager" does not exist
+dbus-daemon[62820]: Activating service name='org.a11y.atspi.Registry' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62820]: Successfully activated service 'org.a11y.atspi.Registry'
+GNOME Shell-Message: 11:40:18.475: Unset XDG_SESSION_ID, getCurrentSessionProxy() called outside a user session. Asking logind directly.
+GNOME Shell-Message: 11:40:18.475: Will monitor session 2
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.freedesktop.systemd1' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gnome.Shell.Screencast' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activated service 'org.freedesktop.systemd1' failed: Process org.freedesktop.systemd1 exited with status 1
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.freedesktop.impl.portal.PermissionStore' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gnome.Shell.CalendarServer' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.freedesktop.impl.portal.PermissionStore'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gnome.evolution.dataserver.Sources5' requested by ':1.8' (uid=1001 pid=62846 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='ca.desrt.dconf' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'ca.desrt.dconf'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gnome.OnlineAccounts' requested by ':1.10' (uid=1001 pid=62859 comm="/usr/libexec/evolution-source-registry" label="unconfined")
+GNOME Shell-Message: 11:40:18.548: Failed to create file /run/user/1001/gnome-shell-disable-extensions: Erreur lors de l’ouverture du fichier « /run/user/1001/gnome-shell-disable-extensions » : Le fichier existe
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gnome.Shell.Notifications' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+
+(gnome-shell:62766): Gjs-WARNING **: 11:40:18.551: JS ERROR: Could not load extension RecentItems: Error: Failed to parse metadata.json: SyntaxError: JSON.parse: expected ',' or ']' after array element at line 10 column 5 of the JSON data
+createExtensionObject@resource:///org/gnome/shell/ui/extensionSystem.js:384:19
+_loadExtensions/extensionObjects<@resource:///org/gnome/shell/ui/extensionSystem.js:753:34
+_loadExtensions@resource:///org/gnome/shell/ui/extensionSystem.js:733:49
+async*_enableAllExtensions@resource:///org/gnome/shell/ui/extensionSystem.js:774:48
+_sessionUpdated@resource:///org/gnome/shell/ui/extensionSystem.js:809:20
+async*init@resource:///org/gnome/shell/ui/extensionSystem.js:72:14
+_initializeUI@resource:///org/gnome/shell/ui/main.js:302:22
+start@resource:///org/gnome/shell/ui/main.js:175:11
+@resource:///org/gnome/shell/ui/init.js:11:47
+@resource:///org/gnome/shell/ui/init.js:21:20
+
+GNOME Shell-Message: 11:40:18.552: Extension auto-move-windows@gnome-shell-extensions.gcampax.github.com already installed in /home/fredz/.local/share/gnome-shell/extensions/auto-move-windows@gnome-shell-extensions.gcampax.github.com. /usr/share/gnome-shell/extensions/auto-move-windows@gnome-shell-extensions.gcampax.github.com will not be loaded
+GNOME Shell-Message: 11:40:18.552: Extension places-menu@gnome-shell-extensions.gcampax.github.com already installed in /home/fredz/.local/share/gnome-shell/extensions/places-menu@gnome-shell-extensions.gcampax.github.com. /usr/share/gnome-shell/extensions/places-menu@gnome-shell-extensions.gcampax.github.com will not be loaded
+GNOME Shell-Message: 11:40:18.552: Extension screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com already installed in /home/fredz/.local/share/gnome-shell/extensions/screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com. /usr/share/gnome-shell/extensions/screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com will not be loaded
+GNOME Shell-Message: 11:40:18.552: Extension windowsNavigator@gnome-shell-extensions.gcampax.github.com already installed in /home/fredz/.local/share/gnome-shell/extensions/windowsNavigator@gnome-shell-extensions.gcampax.github.com. /usr/share/gnome-shell/extensions/windowsNavigator@gnome-shell-extensions.gcampax.github.com will not be loaded
+GNOME Shell-Message: 11:40:18.552: Extension workspace-indicator@gnome-shell-extensions.gcampax.github.com already installed in /home/fredz/.local/share/gnome-shell/extensions/workspace-indicator@gnome-shell-extensions.gcampax.github.com. /usr/share/gnome-shell/extensions/workspace-indicator@gnome-shell-extensions.gcampax.github.com will not be loaded
+
+** (gnome-shell:62766): WARNING **: 11:40:18.554: Could not issue 'GetUnit' systemd call
+Window manager warning: Failed to parse saved session file: L’ouverture du fichier « /home/fredz/.config/mutter/sessions/10dd1dea54569ea068171393793341947600000036440017.ms » a échoué : Aucun fichier ou dossier de ce type
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gtk.vfs.Metadata' requested by ':1.10' (uid=1001 pid=62859 comm="/usr/libexec/evolution-source-registry" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gtk.vfs.Metadata'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gnome.evolution.dataserver.Sources5'
+goa-daemon-Message: 11:40:18.568: goa-daemon version 3.48.0 starting
+GNOME Shell-Message: 11:40:18.570: Error looking up permission: GDBus.Error:org.freedesktop.portal.Error.NotFound: No entry for geolocation
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gnome.Shell.Screencast'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gnome.Identity' requested by ':1.13' (uid=1001 pid=62872 comm="/usr/libexec/goa-daemon" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gnome.OnlineAccounts'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gnome.Identity'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gtk.vfs.UDisks2VolumeMonitor' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gnome.evolution.dataserver.Calendar8' requested by ':1.8' (uid=1001 pid=62846 comm="/usr/libexec/gnome-shell-calendar-server" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.freedesktop.portal.IBus' requested by ':1.15' (uid=1001 pid=62896 comm="ibus-daemon --panel disable" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gnome.Shell.CalendarServer'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gnome.Shell.Notifications'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.freedesktop.portal.IBus'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gtk.vfs.UDisks2VolumeMonitor'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gnome.evolution.dataserver.Calendar8'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gtk.vfs.MTPVolumeMonitor' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gtk.vfs.MTPVolumeMonitor'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gtk.vfs.GoaVolumeMonitor' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.freedesktop.secrets' requested by ':1.13' (uid=1001 pid=62872 comm="/usr/libexec/goa-daemon" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gnome.evolution.dataserver.AddressBook10' requested by ':1.19' (uid=1001 pid=62935 comm="/usr/libexec/evolution-calendar-factory" label="unconfined")
+discover_other_daemon: 1dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gtk.vfs.GoaVolumeMonitor'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gtk.vfs.GPhoto2VolumeMonitor' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gtk.vfs.GPhoto2VolumeMonitor'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.gtk.vfs.AfcVolumeMonitor' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gtk.vfs.AfcVolumeMonitor'
+GNOME Shell-Message: 11:40:18.637: Failed to register AuthenticationAgent
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.gnome.evolution.dataserver.AddressBook10'
+
+(gnome-shell:62766): Gjs-WARNING **: 11:40:19.530: JS ERROR: [ERROR  ][Another window session manager] GTop is not installed, I highly recommend to install it, so that a process can be closed safely. How to install it? Please visit: https://github.com/nlpsuge/gnome-shell-extension-another-window-session-manager#dependencies .: Error: Requiring GTop, version none: Typelib file for namespace 'GTop' (any version) not found
+require@resource:///org/gnome/gjs/modules/esm/gi.js:16:28
+@gi://GTop:3:25
+@resource:///org/gnome/shell/ui/init.js:21:20
+
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.freedesktop.portal.Desktop' requested by ':1.20' (uid=1001 pid=62929 comm="/usr/libexec/ibus-extension-gtk3" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.freedesktop.portal.Documents' requested by ':1.31' (uid=1001 pid=63077 comm="/usr/libexec/xdg-desktop-portal" label="unconfined")
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.freedesktop.portal.Documents'
+fusermount3: failed to access mountpoint /run/user/1001/doc: Permission denied
+error: fuse init failed: Can't mount path /run/user/1001/doc
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.freedesktop.impl.portal.desktop.gnome' requested by ':1.31' (uid=1001 pid=63077 comm="/usr/libexec/xdg-desktop-portal" label="unconfined")
+
+(gnome-shell:62766): libmutter-WARNING **: 11:40:19.594: (../src/backends/meta-barrier.c:283):init_barrier_impl: runtime check failed: (priv->impl)
+GNOME Shell-Message: 11:40:19.727: [INFO   ][Another window session manager] Session summary.json saved to /home/fredz/.config/another-window-session-manager/currentSession/summary.json!
+
+(xdg-desktop-portal-gnome:63098): Gtk-WARNING **: 11:40:19.781: Theme parser error: gtk.css:2:1-122: Failed to import: Erreur lors de l’ouverture du fichier /home/fredz/.local/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk4/buttons-left/maximized.css : Aucun fichier ou dossier de ce type
+Window manager warning: Overwriting existing binding of keysym ff52 with keysym ff52 (keycode 6f).
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.freedesktop.impl.portal.desktop.gnome'
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.freedesktop.FileManager1' requested by ':1.0' (uid=1001 pid=62766 comm="gnome-shell --nested --wayland" label="unconfined")
+** Message: 11:40:19.920: Connecting to org.freedesktop.Tracker3.Miner.Files
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.freedesktop.FileManager1'
+GNOME Shell-Message: 11:40:19.972: GNOME Shell started at Wed Apr 24 2024 11:40:18 GMT+0200 (Central European Summer Time)
+GNOME Shell-Message: 11:40:19.973: Registering session with GDM
+GNOME Shell-Message: 11:40:19.976: Launching DING process
+dbus-daemon[62765]: [session uid=1001 pid=62765] Activating service name='org.freedesktop.impl.portal.desktop.gtk' requested by ':1.31' (uid=1001 pid=63077 comm="/usr/libexec/xdg-desktop-portal" label="unconfined")
+
+(xdg-desktop-portal-gtk:63168): Gtk-WARNING **: 11:40:20.071: Theme parsing error: gtk.css:2:121: Failed to import: Erreur lors de l’ouverture du fichier /home/fredz/.local/share/gnome-shell/extensions/unite@hardpixel.eu/styles/gtk3/buttons-left/maximized.css : Aucun fichier ou dossier de ce type
+dbus-daemon[62765]: [session uid=1001 pid=62765] Successfully activated service 'org.freedesktop.impl.portal.desktop.gtk'
+GNOME Shell-Message: 11:40:22.991: Launching DING process
+GNOME Shell-Message: 11:40:26.007: Launching DING process
+GNOME Shell-Message: 11:40:29.028: Launching DING process
+GNOME Shell-Message: 11:40:32.047: Launching DING process
+
+(goa-daemon:62872): GLib-GIO-WARNING **: 11:40:32.967: Error releasing name org.gnome.OnlineAccounts: La connexion est fermée
+goa-daemon-Message: 11:40:32.967: goa-daemon version 3.48.0 exiting

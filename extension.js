@@ -85,7 +85,9 @@ let SimpleMessage = GObject.registerClass(
         y_align: Clutter.ActorAlign.CENTER,
         y_expand: true,
       });
-      if (shellVersion >= 46) {
+      if (shellVersion >= 49) {
+        this.add_child(this.messageBox);
+      } else if (shellVersion >= 46) {
         this.actor.add_child(this.messageBox);
       } else {
         this.add_actor(this.messageBox);

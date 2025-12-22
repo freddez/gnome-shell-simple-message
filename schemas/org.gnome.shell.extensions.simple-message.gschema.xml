@@ -21,5 +21,10 @@
             <summary>Command</summary>
             <description>Command to launch on click</description>
         </key>
+        <key name="font-size" type="s">
+            <default>"100%"</default>
+            <summary>Font size</summary>
+            <description>Size of the font message</description>
+        </key>
     </schema>
 </schemalist>

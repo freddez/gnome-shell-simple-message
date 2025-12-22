@@ -76,6 +76,7 @@ let SimpleMessage = GObject.registerClass(
       this._settings = extensionObject.getSettings();
       this.message = this._settings.get_string("message");
       this.command = this._settings.get_string("command");
+      this.font_size = this._settings.get_string("font-size");
       this.message_alignment = this._settings.get_int("panel-alignment");
       this.message_position = this._settings.get_int("panel-position");
 
@@ -95,6 +96,7 @@ let SimpleMessage = GObject.registerClass(
 
       // Add message text
       this.messageBox.set_text(this.message);
+      this.messageBox.set_style("font-size: " + this.font_size + ";");
       // Add message to panel
       Main.panel.addToStatusArea(
         "simpleMessage",
@@ -111,6 +113,10 @@ let SimpleMessage = GObject.registerClass(
       this._settings.connect(
         "changed::command",
         this._rewriteCommand.bind(this),
+      );
+      this._settings.connect(
+        "changed::font-size",
+        this._rewriteFontsize.bind(this),
       );
       this._settings.connect(
         "changed::panel-alignment",
@@ -151,6 +157,10 @@ let SimpleMessage = GObject.registerClass(
     }
     _rewriteCommand() {
       this.command = this._settings.get_string("command");
+    }
+    _rewriteFontsize() {
+      this.font_size = this._settings.get_string("font-size");
+      this.messageBox.set_style("font-size: " + this.font_size + ";");
     }
   },
 );

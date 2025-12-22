@@ -126,6 +126,28 @@ export default class SimpleMessahePreferences extends ExtensionPreferences {
     })
     // Add the text box to the row
     commandRow.add_suffix(commandField);
+
+
+    // Create an option to configure message box font size
+    const fontsizeRow = new Adw.ActionRow({
+        title: 'Font Size',
+        subtitle: 'Confirm with Enter'
+    });
+    group.add(fontsizeRow);
+    const fontsizeText = new Gtk.EntryBuffer({
+        text: window.settings.get_string('font-size')
+    });
+    const fontsizeField = new Gtk.Entry({
+        buffer: fontsizeText,
+        hexpand: true,
+        valign:Gtk.Align.CENTER,
+        halign:Gtk.Align.CENTER
+    })
+    fontsizeField.connect('activate', () => {
+      window.settings.set_string('font-size', fontsizeText.text);
+    })
+    // Add the text box to the row
+    fontsizeRow.add_suffix(fontsizeField);
   }
 }
 

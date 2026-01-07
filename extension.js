@@ -27,140 +27,158 @@ import GLib from "gi://GLib";
 let simpleMessage = null; // Variable to hold our extension
 
 export default class SimpleMessageExtension extends Extension {
-  /**
-   * This class is constructed once when your extension is loaded, not
-   * enabled. This is a good time to setup translations or anything else you
-   * only do once.
-   *
-   * You MUST NOT make any changes to GNOME Shell, connect any signals or add
-   * any event sources here.
-   *
-   * @param {ExtensionMeta} metadata - An extension meta object
-   */
-  constructor(metadata) {
-    super(metadata);
-  }
+    /**
+     * This class is constructed once when your extension is loaded, not
+     * enabled. This is a good time to setup translations or anything else you
+     * only do once.
+     *
+     * You MUST NOT make any changes to GNOME Shell, connect any signals or add
+     * any event sources here.
+     *
+     * @param {ExtensionMeta} metadata - An extension meta object
+     */
+    constructor(metadata) {
+        super(metadata);
+    }
 
-  /**
-   * This function is called when your extension is enabled, which could be
-   * done in GNOME Extensions, when you log in or when the screen is unlocked.
-   *
-   * This is when you should setup any UI for your extension, change existing
-   * widgets, connect signals or modify GNOME Shell's behavior.
-   */
-  enable() {
-    simpleMessage = new SimpleMessage(this);
-  }
+    /**
+     * This function is called when your extension is enabled, which could be
+     * done in GNOME Extensions, when you log in or when the screen is unlocked.
+     *
+     * This is when you should setup any UI for your extension, change existing
+     * widgets, connect signals or modify GNOME Shell's behavior.
+     */
+    enable() {
+        simpleMessage = new SimpleMessage(this);
+    }
 
-  /**
-   * This function is called when your extension is uninstalled, disabled in
-   * GNOME Extensions or when the screen locks.
-   *
-   * Anything you created, modified or setup in enable() MUST be undone here.
-   * Not doing so is the most common reason extensions are rejected in review!
-   */
-  disable() {
-    simpleMessage.destroy();
-    simpleMessage = null;
-  }
+    /**
+     * This function is called when your extension is uninstalled, disabled in
+     * GNOME Extensions or when the screen locks.
+     *
+     * Anything you created, modified or setup in enable() MUST be undone here.
+     * Not doing so is the most common reason extensions are rejected in review!
+     */
+    disable() {
+        simpleMessage._disable();
+        simpleMessage.destroy();
+        simpleMessage = null;
+    }
 }
 
 // Create the extension object
 let SimpleMessage = GObject.registerClass(
-  { GTypeName: "SimpleMessage" },
-  class SimpleMessage extends PanelMenu.Button {
-    _init(extensionObject) {
-      super._init(/*St.Align.START*/);
-      const [major] = Config.PACKAGE_VERSION.split(".");
-      const shellVersion = Number.parseInt(major);
-      this._settings = extensionObject.getSettings();
-      this.message = this._settings.get_string("message");
-      this.command = this._settings.get_string("command");
-      this.font_size = this._settings.get_string("font-size");
-      this.message_alignment = this._settings.get_int("panel-alignment");
-      this.message_position = this._settings.get_int("panel-position");
+    { GTypeName: "SimpleMessage" },
+    class SimpleMessage extends PanelMenu.Button {
+        _init(extensionObject) {
+            super._init(/*St.Align.START*/);
+            const [major] = Config.PACKAGE_VERSION.split(".");
+            const shellVersion = Number.parseInt(major);
+            this._settings = extensionObject.getSettings();
+            this.message = this._settings.get_string("message");
+            this.command = this._settings.get_string("command");
+            this.font_size = this._settings.get_string("font-size");
+            this.message_alignment = this._settings.get_int("panel-alignment");
+            this.message_position = this._settings.get_int("panel-position");
 
-      // Create the object that holds and displays the message
-      this.messageBox = new St.Label({
-        name: "simple-message-message",
-        y_align: Clutter.ActorAlign.CENTER,
-        y_expand: true,
-      });
-      if (shellVersion >= 49) {
-        this.add_child(this.messageBox);
-      } else if (shellVersion >= 46) {
-        this.actor.add_child(this.messageBox);
-      } else {
-        this.add_actor(this.messageBox);
-      }
+            // Create the object that holds and displays the message
+            this.messageBox = new St.Label({
+                name: "simple-message-message",
+                y_align: Clutter.ActorAlign.CENTER,
+                y_expand: true,
+            });
+            if (shellVersion >= 49) {
+                this.add_child(this.messageBox);
+            } else if (shellVersion >= 46) {
+                this.actor.add_child(this.messageBox);
+            } else {
+                this.add_actor(this.messageBox);
+            }
 
-      // Add message text
-      this.messageBox.set_text(this.message);
-      this.messageBox.set_style("font-size: " + this.font_size + ";");
-      // Add message to panel
-      Main.panel.addToStatusArea(
-        "simpleMessage",
-        this,
-        this.message_position,
-        this.message_alignment,
-      );
+            // Add message text
+            this.messageBox.set_text(this.message);
+            this.messageBox.set_style("font-size: " + this.font_size + ";");
+            // Add message to panel
+            Main.panel.addToStatusArea(
+                "simpleMessage",
+                this,
+                this.message_position,
+                this.message_alignment,
+            );
 
-      // Connect change in values settings to functions to update the message and position
-      this._settings.connect(
-        "changed::message",
-        this._rewriteMessage.bind(this),
-      );
-      this._settings.connect(
-        "changed::command",
-        this._rewriteCommand.bind(this),
-      );
-      this._settings.connect(
-        "changed::font-size",
-        this._rewriteFontsize.bind(this),
-      );
-      this._settings.connect(
-        "changed::panel-alignment",
-        this._moveMessage.bind(this),
-      );
-      this._settings.connect(
-        "changed::panel-position",
-        this._moveMessage.bind(this),
-      );
-      this.connect("button-press-event", () => {
-        if (this.command) {
-          GLib.spawn_command_line_async(this.command);
+            // Connect change in values settings to functions to update the message and position
+            this._handler_id = this._settings.connect(
+                "changed::message",
+                this._rewriteMessage.bind(this),
+            );
+            this._settings.connect(
+                "changed::command",
+                this._rewriteCommand.bind(this),
+            );
+            this._settings.connect(
+                "changed::font-size",
+                this._rewriteFontsize.bind(this),
+            );
+            this._settings.connect(
+                "changed::panel-alignment",
+                this._moveMessage.bind(this),
+            );
+            this._settings.connect(
+                "changed::panel-position",
+                this._moveMessage.bind(this),
+            );
+            this.connect("button-press-event", () => {
+                if (this.command) {
+                    GLib.spawn_command_line_async(this.command);
+                }
+            });
         }
-      });
-    }
 
-    _rewriteMessage() {
-      this.message = this._settings.get_string("message");
-      this.messageBox.set_text(this.message);
-    }
+        _disable() {
+            if (this._handlerId) {
+                this._settings.disconnect(this._handlerId);
+                this._handlerId = 0;
+            }
+            // Also clean up the reference
+            if (this.messageBox) {
+                this.messageBox.destroy();
+                this.messageBox = null;
+            }
+        }
 
-    _moveMessage() {
-      this.get_parent().remove_actor(this); // Remove from the old location
-      this.message_alignment = this._settings.get_int("panel-alignment");
-      this.message_position = this._settings.get_int("panel-position");
+        _rewriteMessage() {
+            if (!this.messageBox || this.messageBox.is_finalized?.()) {
+                return;
+            }
+            this.message = this._settings.get_string("message");
+            this.messageBox.set_text(this.message || "");
+        }
 
-      // Allows easily addressable boxes
-      let boxes = {
-        0: Main.panel._leftBox,
-        1: Main.panel._centerBox,
-        2: Main.panel._rightBox,
-      };
-      // Insert at new location
-      boxes[this.message_alignment].insert_child_at_index(
-        this,
-        this.message_position,
-      );
-    }
-    _rewriteCommand() {
-      this.command = this._settings.get_string("command");
-    }
-    _rewriteFontsize() {
-      this.font_size = this._settings.get_string("font-size");
-      this.messageBox.set_style("font-size: " + this.font_size + ";");
-    }
-  },
+        _moveMessage() {
+            this.get_parent().remove_actor(this); // Remove from the old location
+            this.message_alignment = this._settings.get_int("panel-alignment");
+            this.message_position = this._settings.get_int("panel-position");
+
+            // Allows easily addressable boxes
+            let boxes = {
+                0: Main.panel._leftBox,
+                1: Main.panel._centerBox,
+                2: Main.panel._rightBox,
+            };
+            // Insert at new location
+            boxes[this.message_alignment].insert_child_at_index(
+                this,
+                this.message_position,
+            );
+        }
+
+        _rewriteCommand() {
+            this.command = this._settings.get_string("command");
+        }
+
+        _rewriteFontsize() {
+            this.font_size = this._settings.get_string("font-size");
+            this.messageBox.set_style("font-size: " + this.font_size + ";");
+        }
+    },
 );

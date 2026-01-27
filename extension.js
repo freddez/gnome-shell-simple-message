@@ -60,7 +60,6 @@ export default class SimpleMessageExtension extends Extension {
      * Not doing so is the most common reason extensions are rejected in review!
      */
     disable() {
-        simpleMessage._disable();
         simpleMessage.destroy();
         simpleMessage = null;
     }
@@ -99,12 +98,10 @@ let SimpleMessage = GObject.registerClass(
             this.messageBox.set_text(this.message);
             this.messageBox.set_style("font-size: " + this.font_size + ";");
             // Add message to panel
-            Main.panel.addToStatusArea(
-                "simpleMessage",
-                this,
-                this.message_position,
-                this.message_alignment,
-            );
+            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                this._moveMessage();
+                return GLib.SOURCE_REMOVE;
+            });
 
             // Connect change in values settings to functions to update the message and position
             this._handler_id = this._settings.connect(
@@ -134,7 +131,7 @@ let SimpleMessage = GObject.registerClass(
             });
         }
 
-        _disable() {
+        destroy() {
             if (this._handlerId) {
                 this._settings.disconnect(this._handlerId);
                 this._handlerId = 0;
@@ -144,6 +141,7 @@ let SimpleMessage = GObject.registerClass(
                 this.messageBox.destroy();
                 this.messageBox = null;
             }
+            super.destroy();
         }
 
         _rewriteMessage() {
@@ -155,7 +153,7 @@ let SimpleMessage = GObject.registerClass(
         }
 
         _moveMessage() {
-            this.get_parent().remove_actor(this); // Remove from the old location
+            this.get_parent()?.remove_child(this);
             this.message_alignment = this._settings.get_int("panel-alignment");
             this.message_position = this._settings.get_int("panel-position");
 

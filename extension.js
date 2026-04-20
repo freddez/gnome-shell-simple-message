@@ -98,32 +98,35 @@ let SimpleMessage = GObject.registerClass(
             this.messageBox.set_text(this.message);
             this.messageBox.set_style("font-size: " + this.font_size + ";");
             // Add message to panel
-            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+            this._idleSourceId = GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                this._idleSourceId = 0;
                 this._moveMessage();
                 return GLib.SOURCE_REMOVE;
             });
 
             // Connect change in values settings to functions to update the message and position
-            this._handler_id = this._settings.connect(
-                "changed::message",
-                this._rewriteMessage.bind(this),
-            );
-            this._settings.connect(
-                "changed::command",
-                this._rewriteCommand.bind(this),
-            );
-            this._settings.connect(
-                "changed::font-size",
-                this._rewriteFontsize.bind(this),
-            );
-            this._settings.connect(
-                "changed::panel-alignment",
-                this._moveMessage.bind(this),
-            );
-            this._settings.connect(
-                "changed::panel-position",
-                this._moveMessage.bind(this),
-            );
+            this._signalIds = [
+                this._settings.connect(
+                    "changed::message",
+                    this._rewriteMessage.bind(this),
+                ),
+                this._settings.connect(
+                    "changed::command",
+                    this._rewriteCommand.bind(this),
+                ),
+                this._settings.connect(
+                    "changed::font-size",
+                    this._rewriteFontsize.bind(this),
+                ),
+                this._settings.connect(
+                    "changed::panel-alignment",
+                    this._moveMessage.bind(this),
+                ),
+                this._settings.connect(
+                    "changed::panel-position",
+                    this._moveMessage.bind(this),
+                ),
+            ];
             this.connect("button-press-event", () => {
                 if (this.command) {
                     GLib.spawn_command_line_async(this.command);
@@ -132,9 +135,14 @@ let SimpleMessage = GObject.registerClass(
         }
 
         destroy() {
-            if (this._handlerId) {
-                this._settings.disconnect(this._handlerId);
-                this._handlerId = 0;
+            if (this._idleSourceId) {
+                GLib.source_remove(this._idleSourceId);
+                this._idleSourceId = 0;
+            }
+            if (this._signalIds) {
+                for (const id of this._signalIds)
+                    this._settings.disconnect(id);
+                this._signalIds = null;
             }
             // Also clean up the reference
             if (this.messageBox) {
